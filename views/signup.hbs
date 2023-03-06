@@ -1,0 +1,24 @@
+<section class='p-4 bg-light'>
+  <h1 class='text-secondary text-center text-success'>SIGN UP (REGISTRARSE)</h1>
+
+  <div class='mb-3'>
+    <form action='/signup' method='POST'>
+      <div>
+        <label class='form-label fw-bold text-secondary fs-3' for='user'>Para registrarse, ingrese los siguientes datos:</label>
+        <br />
+        <input type='text' id='inputNewUser' name='username' class='form-control' placeholder='Email' required />
+        <input type='text' id='inputNewPass' name='password' class='form-control' placeholder='Password' required />
+        <input type='text' id='inputNewName' name='name' class='form-control' placeholder='Nombre' required />
+        <input type='text' id='inputNewAddress' name='address' class='form-control' placeholder='Direccion' required />
+        <input type='text' id='inputNewAge' name='age' class='form-control' placeholder='Edad' required />
+        <input type='tel' id='inputNewPhone' name='phone' class='form-control' placeholder='Telefono (Formato: +54-3517585871)' required />
+        <input type='text' id='inputNewUrl' name='url' class='form-control' placeholder='Url Avatar' required />
+      </div>
+      <br />
+      <input type='submit' class='btn btn-success d-block mx-auto' value='Registrarme!' />
+    </form>
+    <button type='button' class='btn btn-outline-success'><a href='./login' style='text-decoration: none;'>Log In</a></button>
+
+  </div>
+
+</section>
