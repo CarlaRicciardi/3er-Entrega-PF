@@ -89,7 +89,6 @@ class ContenedorMongoDB {
       return 'no existe el numero de id elegido';
     }
   }
-  //vos agregas eltimestamp como parametro.. que pongo si no lo tengo?
   async newCart(username) {
     try {
       const newCart = new modelCart({

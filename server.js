@@ -88,7 +88,7 @@ function createHash(password) {
 passport.use(
   'login',
   new LocalStrategy((username, password, done) => {
-    modelUser.findOne({ username }, (err, user) => {
+    modelUser.findOne({ username }).then((user, err) => {
       if (err) return done(err);
 
       if (!user) {
@@ -99,6 +99,7 @@ passport.use(
         console.log('Invalid Password❌');
         return done(null, false);
       }
+
       return done(null, user);
     });
   })
@@ -111,7 +112,7 @@ passport.use(
       passReqToCallback: true,
     },
     (req, username, password, done) => {
-      modelUser.findOne({ username: username }, function (err, user) {
+      modelUser.findOne({ username: username }).then((user, err) => {
         if (err) {
           console.log('❌error in signup' + err);
           return done(err);
@@ -146,9 +147,10 @@ passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 passport.deserializeUser((id, done) => {
-  modelUser.findById(id, done);
+  modelUser.findById(id).then(done);
 });
 
+//modelUser.findById(id).then(done)
 app.use(passport.initialize()); //inicializamos passport dentro de express
 app.use(passport.session()); //meto la sesion de passport adentro de la app (serializ y deserializ)
 

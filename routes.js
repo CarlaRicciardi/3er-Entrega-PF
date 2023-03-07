@@ -66,7 +66,7 @@ const postLogin = (req, res) => {
 
   const { username, password, name, address, age, phone, url } = req.user;
   const user = { username, password, name, address, age, phone, url };
-  res.render('profileUser', { user });
+  res.redirect('/main');
 };
 
 const postSignUp = (req, res) => {
