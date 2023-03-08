@@ -26,7 +26,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 app.use('/public', express.static(__dirname + '/public'));
 
-const ContenedorProd = require('./classContainer/contenedorProds.js');
+const ContenedorProd = require('./classContainer/contenedor.js');
 const ContenedorMsgs = require('./classContainer/contenedorMsgs.js');
 
 const containerProd = new ContenedorProd({ name: 'products', schema: ProductoSchema });
@@ -106,42 +106,79 @@ passport.use(
 );
 
 passport.use(
-  'signup',
-  new LocalStrategy(
+  "signup",
+  new LocalStrategy( //usuario y password
     {
-      passReqToCallback: true,
+      passReqToCallback: true, //esto va siempre: pasa el request a la siguiente funcion (la de abajo)
     },
     (req, username, password, done) => {
-      modelUser.findOne({ username: username }).then((user, err) => {
+      modelUser.findOne({ username: username }.then((user, err) => {
+        //la busco en la db a la persona
         if (err) {
-          console.log('❌error in signup' + err);
-          return done(err);
+          console.log("Error in SignUp: " + err);
+          return done(err); //error que no es generado por mi, ej que no ande la db
         }
+
         if (user) {
-          console.log('❌user already exists');
-          return done(null, false);
+          console.log("User already exists");
+          return done(null, false); // el false corta la ejecucion
         }
+
         const newUser = {
           username: username,
           password: createHash(password),
-          name: req.body.name,
-          address: req.body.address,
-          age: req.body.age,
-          phone: req.body.phone,
-          url: req.body.url,
         };
         modelUser.create(newUser, (err, userWithId) => {
           if (err) {
-            console.log('❌error in saving user:' + err);
+            console.log("Error in Saving user: " + err);
             return done(err);
           }
-          console.log('user registration succesful:', newUser);
-          return done(null, userWithId);
+          console.log(user);
+          console.log("User Registration succesful");
+          return done(null, userWithId); //error no, usuario con id SI , queda autenticado
         });
-      });
+      }));
     }
   )
 );
+
+// passport.use(
+//   'signup',
+//   new LocalStrategy(
+//     {
+//       passReqToCallback: true,
+//     },
+//     (req, username, password, done) => {
+//       modelUser.findOne({ username: username }).then((user, err) => {
+//         if (err) {
+//           console.log('❌error in signup' + err);
+//           return done(err);
+//         }
+//         if (user) {
+//           console.log('❌user already exists');
+//           return done(null, false);
+//         }
+//         const newUser = {
+//           username: username,
+//           password: createHash(password),
+//           name: req.body.name,
+//           address: req.body.address,
+//           age: req.body.age,
+//           phone: req.body.phone,
+//           url: req.body.url,
+//         };
+//         modelUser.create(newUser, (err, userWithId) => {
+//           if (err) {
+//             console.log('❌error in saving user:' + err);
+//             return done(err);
+//           }
+//           console.log('user registration succesful:', newUser);
+//           return done(null, userWithId);
+//         });
+//       });
+//     }
+//   )
+// );
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
@@ -150,17 +187,16 @@ passport.deserializeUser((id, done) => {
   modelUser.findById(id).then(done);
 });
 
-//modelUser.findById(id).then(done)
 app.use(passport.initialize()); //inicializamos passport dentro de express
 app.use(passport.session()); //meto la sesion de passport adentro de la app (serializ y deserializ)
 
 //FRONT END
-app.get('/main', async (req, res) => {
-  const products = await containerProd.getAll();
-  if (products) {
-    res.render('main', { products });
-  }
-});
+// app.get('/main', async (req, res) => {
+//   const products = await containerProd.getAll();
+//   if (products) {
+//     res.render('main', { products });
+//   }
+// });
 
 //INDEX
 app.get('/', routes.getRoute);

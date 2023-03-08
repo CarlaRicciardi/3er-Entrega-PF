@@ -12,7 +12,7 @@ const getLogin = (req, res) => {
   if (req.isAuthenticated()) {
     const { username, password } = req.user;
     const user = { username, password };
-    res.render('profileUser', { user });
+    res.render('main', { user });
   } else {
     res.render('login', {});
   }
@@ -63,10 +63,9 @@ const failRoute = (req, res) => {
 
 const postLogin = (req, res) => {
   logger.info('postLogin');
-
   const { username, password, name, address, age, phone, url } = req.user;
   const user = { username, password, name, address, age, phone, url };
-  res.redirect('/main');
+  res.render('main', {user});
 };
 
 const postSignUp = (req, res) => {

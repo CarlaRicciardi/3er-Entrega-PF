@@ -2,7 +2,6 @@ const { modelCart } = require('../models/modelCart.js');
 const { modelProduct } = require('../models/modelProduct.js');
 const mongoose = require('mongoose');
 
-
 function validacionId(array, id) {
   const index = array.findIndex((object) => object.id == id);
   if (array[index]) {
