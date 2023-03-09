@@ -99,7 +99,6 @@ passport.use(
         console.log('Invalid Password❌');
         return done(null, false);
       }
-
       return done(null, user);
     });
   })
@@ -142,61 +141,27 @@ passport.use(
   )
 );
 
-// passport.use(
-//   'signup',
-//   new LocalStrategy(
-//     {
-//       passReqToCallback: true,
-//     },
-//     (req, username, password, done) => {
-//       modelUser.findOne({ username: username }).then((user, err) => {
-//         if (err) {
-//           console.log('❌error in signup' + err);
-//           return done(err);
-//         }
-//         if (user) {
-//           console.log('❌user already exists');
-//           return done(null, false);
-//         }
-//         const newUser = {
-//           username: username,
-//           password: createHash(password),
-//           name: req.body.name,
-//           address: req.body.address,
-//           age: req.body.age,
-//           phone: req.body.phone,
-//           url: req.body.url,
-//         };
-//         modelUser.create(newUser, (err, userWithId) => {
-//           if (err) {
-//             console.log('❌error in saving user:' + err);
-//             return done(err);
-//           }
-//           console.log('user registration succesful:', newUser);
-//           return done(null, userWithId);
-//         });
-//       });
-//     }
-//   )
-// );
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 passport.deserializeUser((id, done) => {
-  modelUser.findById(id).then(done);
+  modelUser.findById(id).then((user, err) => {
+    done(err, user)
+  });
 });
+
 
 app.use(passport.initialize()); //inicializamos passport dentro de express
 app.use(passport.session()); //meto la sesion de passport adentro de la app (serializ y deserializ)
 
-//FRONT END
-// app.get('/main', async (req, res) => {
-//   const products = await containerProd.getAll();
-//   if (products) {
-//     res.render('main', { products });
-//   }
-// });
+// FRONT END
+app.get('/main', async (req, res) => {
+  const products = await containerProd.getAll();
+  if (products) {
+    res.render('main', { products });
+  }
+});
 
 //INDEX
 app.get('/', routes.getRoute);
@@ -204,7 +169,7 @@ app.get('/', routes.getRoute);
 //LOGIN
 app.get('/login', routes.getLogin);
 app.get('/failLogin', routes.getFailLogin);
-app.post('/login', passport.authenticate('login', { failureRedirect: '/failLogin' }), routes.postLogin);
+app.post('/login', passport.authenticate("login", { failureRedirect: "/failLogin" }), routes.postLogin);
 
 //SIGNUP
 app.get('/signup', routes.getSignUp);

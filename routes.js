@@ -4,19 +4,19 @@ const logger = require('./utils/loggerWinston.js');
 
 const getRoute = (req, res) => {
   logger.info('getRoute');
-  res.render('login', {});
+  res.redirect('/login')
 };
 
-const getLogin = (req, res) => {
-  logger.info('getLogin');
+function getLogin(req, res) {
   if (req.isAuthenticated()) {
     const { username, password } = req.user;
     const user = { username, password };
     res.render('main', { user });
   } else {
-    res.render('login', {});
+    res.render('login');
   }
-};
+}
+
 
 const getFailLogin = (req, res) => {
   logger.info('getFailLogin');
@@ -63,9 +63,9 @@ const failRoute = (req, res) => {
 
 const postLogin = (req, res) => {
   logger.info('postLogin');
-  const { username, password, name, address, age, phone, url } = req.user;
-  const user = { username, password, name, address, age, phone, url };
-  res.render('main', {user});
+  /* const { username, password, name, address, age, phone, url } = req.user;
+  const user = { username, password, name, address, age, phone, url }; */
+  res.redirect('/main')
 };
 
 const postSignUp = (req, res) => {
