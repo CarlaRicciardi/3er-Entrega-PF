@@ -26,7 +26,7 @@ const getSignUp = (req, res) => {
   logger.info('getSignUp');
   console.log('hola getsignup0');
   if (req.isAuthenticated()) {
-    // console.log('hola getsignup')
+    console.log('hola getsignup1');
     const { username, password, name, address, age, phone, url } = req.user;
     const user = { username, password, name, address, age, phone, url };
     req.session.user = user;
@@ -34,7 +34,8 @@ const getSignUp = (req, res) => {
     // res.render('main', { user });
     // console.log('chau getsignup')
   } else {
-    res.render('signup');
+    res.render('signup');//LE PONGO RES.REDIRECT Y NO ME FUNCIONA
+    console.log('hola getsignup2'); //ESTA ENTRANDO EN EL ELSE. POR QUE???
   }
 };
 
