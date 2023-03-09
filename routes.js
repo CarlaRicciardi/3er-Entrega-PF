@@ -4,7 +4,7 @@ const logger = require('./utils/loggerWinston.js');
 
 const getRoute = (req, res) => {
   logger.info('getRoute');
-  res.redirect('/login')
+  res.redirect('/login');
 };
 
 function getLogin(req, res) {
@@ -17,7 +17,6 @@ function getLogin(req, res) {
   }
 }
 
-
 const getFailLogin = (req, res) => {
   logger.info('getFailLogin');
   res.render('failLogin', {});
@@ -25,11 +24,15 @@ const getFailLogin = (req, res) => {
 
 const getSignUp = (req, res) => {
   logger.info('getSignUp');
-
+  console.log('hola getsignup0');
   if (req.isAuthenticated()) {
+    // console.log('hola getsignup')
     const { username, password, name, address, age, phone, url } = req.user;
     const user = { username, password, name, address, age, phone, url };
-    res.render('main', { user });
+    req.session.user = user;
+    res.redirect('/main');
+    // res.render('main', { user });
+    // console.log('chau getsignup')
   } else {
     res.render('signup');
   }
@@ -65,16 +68,18 @@ const postLogin = (req, res) => {
   logger.info('postLogin');
   const { username, password, name, address, age, phone, url } = req.user;
   const user = { username, password, name, address, age, phone, url };
-  req.session.user = user
-  res.redirect('/main')
+  req.session.user = user;
+  res.redirect('/main');
 };
 
 const postSignUp = (req, res) => {
   logger.info('postSignUp');
-
+  // console.log('holaa');
   const { username, password, name, address, age, phone, url } = req.user;
   const user = { username, password, name, address, age, phone, url };
   sendMail(username);
+  // console.log('req.user:::::::::', req.user);
+  // console.log('userrrrrrrrrr', user);
   res.render('successSignUp', { user });
 };
 

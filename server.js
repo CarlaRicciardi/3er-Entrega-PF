@@ -21,10 +21,19 @@ const PORT = process.env.PORT;
 const MODE = process.env.MODE;
 const MONGO_URL = process.env.MONGO_URL;
 
+//middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(compression());
 app.use('/public', express.static(__dirname + '/public'));
+function checkAuthentication(req, res, next) {
+  if (req.isAuthenticated()) {
+    //este metodo lo trae passport, no esta declarada en el proyecto
+    next();
+  } else {
+    res.redirect('/login');
+  }
+}
 
 const ContenedorProd = require('./classContainer/contenedor.js');
 const ContenedorMsgs = require('./classContainer/contenedorMsgs.js');
@@ -105,58 +114,54 @@ passport.use(
 );
 
 passport.use(
-  "signup",
-  new LocalStrategy( //usuario y password
+  'signup',
+  new LocalStrategy(
     {
-      passReqToCallback: true, //esto va siempre: pasa el request a la siguiente funcion (la de abajo)
+      passReqToCallback: true,
     },
     (req, username, password, done) => {
-      modelUser.findOne({ username: username }.then((user, err) => {
+      modelUser.findOne({ username: username }).then((user, err) => {
         //la busco en la db a la persona
         if (err) {
-          console.log("Error in SignUp: " + err);
-          return done(err); //error que no es generado por mi, ej que no ande la db
+          console.log('Error in SignUp: ' + err);
+          return done(err);
         }
-
         if (user) {
-          console.log("User already exists");
-          return done(null, false); // el false corta la ejecucion
+          console.log('User already exists');
+          return done(null, false);
         }
-
         const newUser = {
           username: username,
           password: createHash(password),
         };
-        modelUser.create(newUser, (err, userWithId) => {
+        modelUser.create(newUser).then((err, userWithId) => {
           if (err) {
-            console.log("Error in Saving user: " + err);
+            console.log('Error in Saving user: ' + err);
             return done(err);
           }
           console.log(user);
-          console.log("User Registration succesful");
-          return done(null, userWithId); //error no, usuario con id SI , queda autenticado
+          console.log('User Registration succesful');
+          return done(null, userWithId);
         });
-      }));
+      });
     }
   )
 );
-
 
 passport.serializeUser((user, done) => {
   done(null, user._id);
 });
 passport.deserializeUser((id, done) => {
   modelUser.findById(id).then((user, err) => {
-    done(err, user)
+    done(err, user);
   });
 });
-
 
 app.use(passport.initialize()); //inicializamos passport dentro de express
 app.use(passport.session()); //meto la sesion de passport adentro de la app (serializ y deserializ)
 
 // FRONT END
-app.get('/main', async (req, res) => {
+app.get('/main', checkAuthentication, async (req, res) => {
   const products = await containerProd.getAll();
   if (products) {
     res.render('main', { products, user: req.session.user });
@@ -169,7 +174,7 @@ app.get('/', routes.getRoute);
 //LOGIN
 app.get('/login', routes.getLogin);
 app.get('/failLogin', routes.getFailLogin);
-app.post('/login', passport.authenticate("login", { failureRedirect: "/failLogin" }), routes.postLogin);
+app.post('/login', passport.authenticate('login', { failureRedirect: '/failLogin' }), routes.postLogin);
 
 //SIGNUP
 app.get('/signup', routes.getSignUp);
