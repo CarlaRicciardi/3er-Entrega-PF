@@ -63,8 +63,9 @@ const failRoute = (req, res) => {
 
 const postLogin = (req, res) => {
   logger.info('postLogin');
-  /* const { username, password, name, address, age, phone, url } = req.user;
-  const user = { username, password, name, address, age, phone, url }; */
+  const { username, password, name, address, age, phone, url } = req.user;
+  const user = { username, password, name, address, age, phone, url };
+  req.session.user = user
   res.redirect('/main')
 };
 

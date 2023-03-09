@@ -159,7 +159,7 @@ app.use(passport.session()); //meto la sesion de passport adentro de la app (ser
 app.get('/main', async (req, res) => {
   const products = await containerProd.getAll();
   if (products) {
-    res.render('main', { products });
+    res.render('main', { products, user: req.session.user });
   }
 });
 
