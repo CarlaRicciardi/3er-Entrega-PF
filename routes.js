@@ -75,12 +75,9 @@ const postLogin = (req, res) => {
 
 const postSignUp = (req, res) => {
   logger.info('postSignUp');
-  // console.log('holaa');
   const { username, password, name, address, age, phone, url } = req.user;
   const user = { username, password, name, address, age, phone, url };
-  sendMail(username);
-  // console.log('req.user:::::::::', req.user);
-  // console.log('userrrrrrrrrr', user);
+    // sendMail(username);
   res.render('successSignUp', { user });
 };
 

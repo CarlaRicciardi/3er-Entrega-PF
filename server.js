@@ -52,7 +52,7 @@ app.engine(
     defaultLayout: 'index.hbs',
     layoutsDir: __dirname + '/views/layouts',
     partialsDir: __dirname + '/views/partials',
-  })
+  }),
 );
 
 // MONGOOSE CONNECTION
@@ -82,7 +82,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: { maxAge: 60000 },
-  })
+  }),
 );
 
 //PASSPORT----------------------------------------------------------------
@@ -110,7 +110,7 @@ passport.use(
       }
       return done(null, user);
     });
-  })
+  }),
 );
 
 passport.use(
@@ -133,8 +133,13 @@ passport.use(
         const newUser = {
           username: username,
           password: createHash(password),
+          name: req.body.name,
+          address: req.body.address,
+          age: req.body.age,
+          phone: req.body.phone,
+          url: req.body.url,
         };
-        modelUser.create(newUser).then((err, userWithId) => {
+        modelUser.create(newUser).then((userWithId, err) => {
           if (err) {
             console.log('Error in Saving user: ' + err);
             return done(err);
@@ -144,8 +149,8 @@ passport.use(
           return done(null, userWithId);
         });
       });
-    }
-  )
+    },
+  ),
 );
 
 passport.serializeUser((user, done) => {
