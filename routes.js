@@ -34,7 +34,7 @@ const getSignUp = (req, res) => {
     // res.render('main', { user });
     // console.log('chau getsignup')
   } else {
-    res.render('signup');//LE PONGO RES.REDIRECT Y NO ME FUNCIONA
+    res.render('signup'); //LE PONGO RES.REDIRECT Y NO ME FUNCIONA
     console.log('hola getsignup2'); //ESTA ENTRANDO EN EL ELSE. POR QUE???
   }
 };
@@ -77,7 +77,7 @@ const postSignUp = (req, res) => {
   logger.info('postSignUp');
   const { username, password, name, address, age, phone, url } = req.user;
   const user = { username, password, name, address, age, phone, url };
-    // sendMail(username);
+  // sendMail(username);
   res.render('successSignUp', { user });
 };
 
@@ -85,6 +85,10 @@ const getInfo = (req, res) => {
   logger.info('getInfo');
   res.render('info', {});
 };
+
+// const getCart = (req, res) => {
+//   res.render('cart');
+// };
 
 module.exports = {
   getRoute,

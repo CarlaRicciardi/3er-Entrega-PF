@@ -198,6 +198,8 @@ app.get('/datos', (req, res) => {
     <b>PID ${process.pid}</b> - ${new Date().toLocaleString()}`);
 });
 
+// app.get('/cart', routes.getCart);
+
 //FAILROUTE
 app.get('*', routes.failRoute);
 
