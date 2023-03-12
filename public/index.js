@@ -31,14 +31,14 @@ const render = (data) => {
     <td class='align-middle text-center'>${obj.title}</td>
     <td class='align-middle text-center'>$${obj.price}</td>
     <td class='align-middle text-center'><img src='${obj.thumbnail}' width='50' height='auto' class='img-fluid' /></td>
-    <td class='align-middle text-center'><button type="button" class="btn btn-success" id='${obj._id}' onclick='addToCart(${obj._id})'>Agregar al carrito</button></td>
+    <td class='align-middle text-center'><button type="button" class="btn btn-success" id='${obj._id}' onclick='addToCart()'>Agregar al carrito</button></td>
     </tr>`;
     document.getElementById('productsList').innerHTML = html;
-    // const boton = document.getElementById(`${obj._id}`);
-    // boton.addEventListener('click', () => {
-    //   console.log('hola');
-    // addToCart(`${obj._id}`);
-    // });
+    const botonAddToCart = document.getElementById(`${obj._id}`);
+    botonAddToCart.addEventListener('click', () => {
+      console.log('obj._id');
+      addToCart(`${obj._id}`);
+    });
   });
 };
 
