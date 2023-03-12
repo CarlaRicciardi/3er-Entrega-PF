@@ -17,9 +17,11 @@ const sendProd = () => {
   return;
 };
 
-const addToCart = () => {
-  // cart = [];
-  console.log('agregar al carrito');
+let cart = [];
+
+const addToCart = (productId) => {
+  cart.push(productId);
+  console.log('cart:', cart);
 };
 
 const render = (data) => {
@@ -29,15 +31,15 @@ const render = (data) => {
     <td class='align-middle text-center'>${obj.title}</td>
     <td class='align-middle text-center'>$${obj.price}</td>
     <td class='align-middle text-center'><img src='${obj.thumbnail}' width='50' height='auto' class='img-fluid' /></td>
-    <td class='align-middle text-center'><button type="button" class="btn btn-success" onclick='addToCart()'>Agregar al carrito</button></td>
+    <td class='align-middle text-center'><button type="button" class="btn btn-success" id='${obj._id}' onclick='addToCart(${obj._id})'>Agregar al carrito</button></td>
     </tr>`;
+    document.getElementById('productsList').innerHTML = html;
+    // const boton = document.getElementById(`${obj._id}`);
+    // boton.addEventListener('click', () => {
+    //   console.log('hola');
+    // addToCart(`${obj._id}`);
+    // });
   });
-  //<button type="button" class="btn btn-success" onclick='addToCart()'>Agregar al carrito</button>
-  //<a href="/cart" class="btn btn-success" onclick='addToCart()'>Agregar al carrito</a>
-  //<input class='btn btn-success d-block mx-auto' onclick='addToCart()' type='submit' value='Enviar' />
-
-  document.getElementById('productsList').innerHTML = html;
-  //productsList viene de main.hbs - <tbody id='productsList'> // linea 40
 };
 
 //4) atrapar desde el front el array de productos actualizado
