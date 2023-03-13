@@ -20,7 +20,7 @@ const sendProd = () => {
 let cart = [];
 
 const addToCart = (productId) => {
-  cart.push(productId);
+  cart.push(productId)
   console.log('cart:', cart);
 };
 
@@ -35,8 +35,9 @@ const render = (data) => {
     </tr>`;
     document.getElementById('productsList').innerHTML = html;
     const botonAddToCart = document.getElementById(`${obj._id}`);
-    botonAddToCart.addEventListener('click', () => {
-      console.log('obj._id');
+    console.log('obj.id1:', `${obj._id}`);
+    botonAddToCart.addEventListener('click', (e) => {
+      e.preventDefault()
       addToCart(`${obj._id}`);
     });
   });
