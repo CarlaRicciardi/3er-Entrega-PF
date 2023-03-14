@@ -13,6 +13,19 @@ const modelUser = require('./models/modelUser.js');
 const bcrypt = require('bcrypt');
 const routes = require('./routes.js');
 
+//middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(compression());
+app.use('/public', express.static(__dirname + '/public'));
+app.use(passport.initialize()); //inicializamos passport dentro de express
+
+const ContenedorProd = require('./classContainer/contenedor.js');
+const ContenedorMsgs = require('./classContainer/contenedorMsgs.js');
+
+const containerProd = new ContenedorProd({ name: 'products', schema: ProductoSchema });
+const containerMsgs = new ContenedorMsgs('msgsTable2');
+
 if (process.env.MODE != 'production') {
   require('dotenv').config();
 }
@@ -21,11 +34,6 @@ const PORT = process.env.PORT;
 const MODE = process.env.MODE;
 const MONGO_URL = process.env.MONGO_URL;
 
-//middlewares
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(compression());
-app.use('/public', express.static(__dirname + '/public'));
 function checkAuthentication(req, res, next) {
   if (req.isAuthenticated()) {
     //este metodo lo trae passport, no esta declarada en el proyecto
@@ -34,12 +42,7 @@ function checkAuthentication(req, res, next) {
     res.redirect('/login');
   }
 }
-
-const ContenedorProd = require('./classContainer/contenedor.js');
-const ContenedorMsgs = require('./classContainer/contenedorMsgs.js');
-
-const containerProd = new ContenedorProd({ name: 'products', schema: ProductoSchema });
-const containerMsgs = new ContenedorMsgs('msgsTable2');
+``;
 
 //CONNECTION HANDLEBARS
 const { engine } = require('express-handlebars');
@@ -162,7 +165,6 @@ passport.deserializeUser((id, done) => {
   });
 });
 
-app.use(passport.initialize()); //inicializamos passport dentro de express
 app.use(passport.session()); //meto la sesion de passport adentro de la app (serializ y deserializ)
 
 // FRONT END
